@@ -1,0 +1,24 @@
+galaxy_info:
+  author: jeqo (quilcate.jorge@gmail.com)
+  description: generate and execute wlst scripts
+  company:
+
+  license: MIT
+
+  min_ansible_version: 2.0
+
+  github_branch: master
+
+  platforms:
+  - name: EL
+    versions:
+    - all
+
+  categories:
+  - development
+
+  galaxy_tags:
+  - generate
+  - execute
+
+dependencies: []
