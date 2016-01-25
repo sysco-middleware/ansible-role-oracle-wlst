@@ -1,10 +1,10 @@
-ADMIN_SERVER = '{{ oracle_wlst_create_domain.adminserver.name }}'
+ADMIN_SERVER = '{{ oracle_wlst_create_domain_info.adminserver.name }}'
 
 DOMAIN_PATH = '{{ oracle_wlst_create_domain_domains_home }}/{{ oracle_wlst_create_domain_info.name }}'
-APP_PATH = '{{ oracle_wlst_create_domain_applications_home }}/{{ oracle_wlst_create_domain.name }}'
+APP_PATH = '{{ oracle_wlst_create_domain_applications_home }}/{{ oracle_wlst_create_domain_info.name }}'
 
 # Select the template to use for creating the domain
-{% for template in oracle_wlst_create_domain.templates %}
+{% for template in oracle_wlst_create_domain_info.templates %}
 selectTemplate('{{ template.name }}', '{{ template.version }}')
 {% endfor %}
 loadTemplates()
@@ -17,13 +17,13 @@ set('Name',ADMIN_SERVER )
 cd('/Servers/'+ADMIN_SERVER)
 
 # address and port
-set('ListenAddress','{{ oracle_wlst_create_domain.adminserver.listen_address }}')
-set('ListenPort'   ,{{ oracle_wlst_create_domain.adminserver.listen_port }})
+set('ListenAddress','{{ oracle_wlst_create_domain_info.adminserver.listen_address }}')
+set('ListenPort'   ,{{ oracle_wlst_create_domain_info.adminserver.listen_port }})
 
 # Set the domain password for the WebLogic Server administration user
 cd('/')
-cd('Security/base_domain/User/{{ oracle_wlst_create_domain.adminuser.username }}')
-cmo.setPassword('{{ oracle_wlst_create_domain.adminuser.password }}')
+cd('Security/base_domain/User/{{ oracle_wlst_create_domain_info.adminuser.username }}')
+cmo.setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
 
 # If the domain already exists, overwrite the domain
 setOption('OverwriteDomain', 'true')
