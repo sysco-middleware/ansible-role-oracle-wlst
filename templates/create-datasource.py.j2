@@ -1,0 +1,38 @@
+def createDatasource(ds_name, ds_targets, ds_jdbc_driver, ds_jdbc_url, ds_schema_username, ds_schema_password):
+  print 'creating ' + ds_name
+  create(ds_name, 'JDBCSystemResource')
+  cd('/JDBCSystemResource/' + ds_name)
+  set('Target',ds_targets)
+
+  cd('/JDBCSystemResource/' + ds_name+ '/JdbcResource/' + ds_name)
+  cmo.setName(ds_name)
+
+  print 'create JDBCDataSourceParams'
+  cd('/JDBCSystemResource/' + ds_name+ '/JdbcResource/' + ds_name)
+  create('myJdbcDataSourceParams','JDBCDataSourceParams')
+  cd('JDBCDataSourceParams/NO_NAME_0')
+  set('JNDIName', java.lang.String('jdbc/' + ds_name))
+  set('GlobalTransactionsProtocol', java.lang.String('None'))
+
+  print 'create JDBCDriverParams'
+  cd('/JDBCSystemResource/' + ds_name+ '/JdbcResource/' + ds_name)
+  create('myJdbcDriverParams','JDBCDriverParams')
+  cd('JDBCDriverParams/NO_NAME_0')
+  set('DriverName',ds_jdbc_driver)
+  set('URL',ds_jdbc_url)
+  set('PasswordEncrypted', ds_schema_password)
+  set('UseXADataSourceInterface', 'false')
+
+  print 'create JDBCDriverParams Properties'
+  create('myProperties','Properties')
+  cd('Properties/NO_NAME_0')
+  create('user','Property')
+  cd('Property')
+  cd('user')
+  set('Value', ds_schema_username)
+
+  print 'create JDBCConnectionPoolParams'
+  cd('/JDBCSystemResource/' + ds_name+ '/JdbcResource/' + ds_name)
+  create('myJdbcConnectionPoolParams','JDBCConnectionPoolParams')
+  cd('JDBCConnectionPoolParams/NO_NAME_0')
+  set('TestTableName','SQL SELECT 1 FROM DUAL')

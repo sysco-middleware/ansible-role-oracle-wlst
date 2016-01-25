@@ -26,6 +26,14 @@ oracle_wlst_create_domain_info:
   adminuser:
     username: weblogic
     password: welcome1
+  custom_datasources:
+#    -
+#      name: ds
+#      targets: AdminServer
+#      jdbc_driver: oracle.jdbc.OracleDriver
+#      jdbc_url: jdbc:oracle:thin:@localhost:1521:TEST
+#      schema_username: USER
+#      schema_password: welcome1
 
 oracle_wlst_create_domain_templates:
 #  -

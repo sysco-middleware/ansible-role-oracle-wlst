@@ -4,6 +4,10 @@
     wlst_path: /tmp/create_domain.py
 
 - template:
+    src: create-datasource.py.j2
+    dest: /tmp/create-datasource.py
+
+- template:
     src: create-domain.py.j2
     dest: "{{ wlst_path }}"
 
