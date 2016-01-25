@@ -1,2 +1,4 @@
 ---
 # tasks file for oracle-wlst
+- include: create-domain.yml
+  when: oracle_wlst_create_domain

@@ -1,2 +1,18 @@
 ---
 # defaults file for oracle-wlst
+oracle_wlst_create_domain: yes
+
+oracle_wlst_create_domain_name: domain_name # weblogic, soa, bpm
+oracle_wlst_create_domain_admin_username: weblogic
+oracle_wlst_create_domain_admin_password: welcome1
+
+oracle_wlst_create_domain_templates:
+#  -
+#    name:
+#    version:
+oracle_wlst_create_domain_datasources:
+#  -
+#    name:
+#    jndi:
+#    db_user:
+#    db_password:
