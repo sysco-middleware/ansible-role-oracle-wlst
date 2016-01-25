@@ -34,6 +34,28 @@ oracle_wlst_create_domain_info:
 #      jdbc_url: jdbc:oracle:thin:@localhost:1521:TEST
 #      schema_username: USER
 #      schema_password: welcome1
+  filestores:
+#    -
+#      name:
+#      directory:
+#      targets:
+  messaging:
+    jms_servers:
+#      -
+#        name:
+#        filestore:
+#        targets:
+#        jms_modules:
+#          -
+#            name:
+#            subdeployment:
+#            targets:
+#            connection_factories:
+#              -
+#                name:
+#            queues:
+#              -
+#                name:
 
 oracle_wlst_create_domain_templates:
 #  -
