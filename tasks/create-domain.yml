@@ -1,0 +1,10 @@
+
+
+- set_fact:
+    wlst_path: create_domain.py
+
+- template:
+    src: create-domain.py.j2
+    dest: {{ wlst_path }}
+
+- include: execute-wlst.yml

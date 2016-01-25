@@ -1,6 +1,13 @@
 ---
 #
+- set_fact:
+    execute_command: "{{ oracle_wlst_oracle_home }}/oracle_common/common/bin/wlst.sh {{ wlst_path }} -Djava.security.egd=file:/dev/urandom"
+
+- debug:
+    msg: "command '{{ execute_command }}' will be executed by {{ oracle_wslt_os_user }} user"
+
 - name: execute wlst
-  shell: "{{ oracle_wlst_oracle_home }}/oracle_common/common/bin/wlst.sh {{ oracle_wlst_path }} -Djava.security.egd=file:/dev/urandom  >> /tmp/weblogic-domain-creation.log"
+  shell: "{{ execute_command }} >> /tmp/oracle-wlst.log"
   become: yes
   become_user: "{{ oracle_wslt_os_user }}"
+  when: oracle_wlst_execute

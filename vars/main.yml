@@ -1,2 +1,3 @@
 ---
 # vars file for oracle-wlst
+oracle_wslt_os_user: oraclefmw
