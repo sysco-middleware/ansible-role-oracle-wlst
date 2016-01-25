@@ -127,7 +127,7 @@ set('ListenPort'   ,{{ oracle_wlst_create_domain_info.adminserver.listen_port }}
 # Set the domain password for the WebLogic Server administration user
 cd('/')
 cd('Security/base_domain/User/{{ oracle_wlst_create_domain_info.adminuser.username }}')
-setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
+cmo.setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
 
 # If the domain already exists, overwrite the domain
 setOption('OverwriteDomain', 'true')
