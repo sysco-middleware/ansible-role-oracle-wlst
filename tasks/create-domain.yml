@@ -1,7 +1,7 @@
 
 
 - set_fact:
-    wlst_path: create_domain.py
+    wlst_path: /tmp/create_domain.py
 
 - template:
     src: create-domain.py.j2
