@@ -71,10 +71,10 @@ def createJmsModule(jmsmodule_name, jmsmodule_subdeployment, jmsmodule_targets, 
 
 def createJmsConnectionFactory(jmsconnfactory_name, jmsmodule_name, jmsmodule_subdeployment):
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name)
-  cmo.createConnectionFactory('' + jmsconnfactory_name + '')
+  cmo.createConnectionFactory(jmsconnfactory_name)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name)
-  cmo.setJNDIName('jms.' + )
+  cmo.setJNDIName('jms.' + jmsconnfactory_name)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/SecurityParams/' + jmsconnfactory_name)
   cmo.setAttachJMSXUserId(false)
