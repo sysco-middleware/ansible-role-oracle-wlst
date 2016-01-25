@@ -35,27 +35,27 @@ oracle_wlst_create_domain_info:
 #      schema_username: USER
 #      schema_password: welcome1
   filestores:
-#    -
-#      name:
-#      directory:
-#      targets:
+    -
+      name:
+      directory:
+      targets:
   messaging:
     jms_servers:
-#      -
-#        name:
-#        filestore:
-#        targets:
-#        jms_modules:
-#          -
-#            name:
-#            subdeployment:
-#            targets:
-#            connection_factories:
-#              -
-#                name:
-#            queues:
-#              -
-#                name:
+      -
+        name:
+        filestore:
+        targets:
+        jms_modules:
+          -
+            name:
+            subdeployment:
+            targets:
+            connection_factories:
+              -
+                name:
+            queues:
+              -
+                name:
 
 oracle_wlst_create_domain_templates:
 #  -

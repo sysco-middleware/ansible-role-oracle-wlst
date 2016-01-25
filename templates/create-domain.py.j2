@@ -139,7 +139,7 @@ createJmsServer('{{ jms_server.name }}', '{{ jms_server.filestore }}', '{{ jms_s
 createJmsModule('{{ jms_module.name }}', '{{ jms_module.subdeployment }}', '{{ jms_module.targets }}', '{{ jms_server.name }}')
 {% for jms_conn_factory in jms_module.connection_factories %}
 createJmsConnectionFactory('{{ jms_conn_factory.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
-{% for jms_queue in jms_module.jms_queues %}
+{% for jms_queue in jms_module.queues %}
 createJmsQueue('{{ jms_queue.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
 {% endfor %}
 {% endfor %}
