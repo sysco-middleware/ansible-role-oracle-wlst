@@ -3,7 +3,7 @@ ADMIN_SERVER = '{{ oracle_wlst_create_domain_info.adminserver.name }}'
 DOMAIN_PATH = '{{ oracle_wlst_create_domain_domains_home }}/{{ oracle_wlst_create_domain_info.name }}'
 APP_PATH = '{{ oracle_wlst_create_domain_applications_home }}/{{ oracle_wlst_create_domain_info.name }}'
 
-def createDatasource(ds_name, ds_targets, ds_jdbc_driver, ds_jdbc_url, ds_schema_username, ds_schema_password):
+def addDatasource(ds_name, ds_targets, ds_jdbc_driver, ds_jdbc_url, ds_schema_username, ds_schema_password):
   cd('/')
   print 'creating datasource: ' + ds_name
   create(ds_name, 'JDBCSystemResource')
@@ -11,7 +11,7 @@ def createDatasource(ds_name, ds_targets, ds_jdbc_driver, ds_jdbc_url, ds_schema
   set('Target',ds_targets)
 
   cd('/JDBCSystemResource/' + ds_name+ '/JdbcResource/' + ds_name)
-  cmo.setName(ds_name)
+  setName(ds_name)
 
   print 'create JDBCDataSourceParams'
   cd('/JDBCSystemResource/' + ds_name+ '/JdbcResource/' + ds_name)
@@ -43,65 +43,65 @@ def createDatasource(ds_name, ds_targets, ds_jdbc_driver, ds_jdbc_url, ds_schema
   cd('JDBCConnectionPoolParams/NO_NAME_0')
   set('TestTableName','SQL SELECT 1 FROM DUAL')
 
-def createFileStore(filestore_name, filestore_directory, filestore_targets):
+def addFileStore(filestore_name, filestore_directory, filestore_targets):
   cd('/')
   print 'creating jms filestore: ' + filestore_name
-  cmo.createFileStore(filestore_name)
+  createFileStore(filestore_name)
 
   cd('/FileStores/' + filestore_name)
-  cmo.setDirectory(filestore_directory)
+  setDirectory(filestore_directory)
   set('Target',filestore_targets)
 
-def createJmsServer(jmsserver_name, filestore_name, jmsserver_targets):
+def addJmsServer(jmsserver_name, filestore_name, jmsserver_targets):
   cd('/')
   print 'creating jms server: ' + jmsserver_name
-  cmo.createJMSServer(jmsserver_name)
+  createJMSServer(jmsserver_name)
 
   cd('/JMSServers/' + jmsserver_name)
-  cmo.setPersistentStore(getMBean('/FileStores/' + filestore_name))
+  setPersistentStore(getMBean('/FileStores/' + filestore_name))
   set('Target',jmsserver_targets)
 
-def createJmsModule(jmsmodule_name, jmsmodule_subdeployment, jmsmodule_targets, jmsserver):
+def addJmsModule(jmsmodule_name, jmsmodule_subdeployment, jmsmodule_targets, jmsserver):
   cd('/')
   print 'creating jms module: ' + jmsmodule_name
-  cmo.createJMSSystemResource(jmsmodule_name)
+  createJMSSystemResource(jmsmodule_name)
 
   cd('/JMSSystemResources/' + jmsmodule_name)
   set('Target',jmsmodule_targets)
-  cmo.createSubDeployment(jmsmodule_subdeployment)
+  createSubDeployment(jmsmodule_subdeployment)
   cd('/JMSSystemResources/' + jmsmodule_name + '/SubDeployments/' + jmsmodule_subdeployment)
   set('Targets',jarray.array([ObjectName('com.bea:Name=' + jmsserver + ',Type=JMSServer')], ObjectName))
 
-def createJmsConnectionFactory(jmsconnfactory_name, jmsmodule_name, jmsmodule_subdeployment):
+def addJmsConnectionFactory(jmsconnfactory_name, jmsmodule_name, jmsmodule_subdeployment):
   print 'creating jms cf: ' + jmsconnfactory_name
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name)
-  cmo.createConnectionFactory(jmsconnfactory_name)
+  createConnectionFactory(jmsconnfactory_name)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name)
-  cmo.setJNDIName('jms.' + jmsconnfactory_name)
+  setJNDIName('jms.' + jmsconnfactory_name)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/SecurityParams/' + jmsconnfactory_name)
-  cmo.setAttachJMSXUserId(false)
+  setAttachJMSXUserId(false)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/ClientParams/' + jmsconnfactory_name)
-  cmo.setClientIdPolicy('Restricted')
-  cmo.setSubscriptionSharingPolicy('Exclusive')
-  cmo.setMessagesMaximum(10)
+  setClientIdPolicy('Restricted')
+  setSubscriptionSharingPolicy('Exclusive')
+  setMessagesMaximum(10)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/TransactionParams/' + jmsconnfactory_name)
-  cmo.setXAConnectionFactoryEnabled(true)
+  setXAConnectionFactoryEnabled(true)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '')
-  cmo.setSubDeploymentName(jmsmodule_subdeployment)
+  setSubDeploymentName(jmsmodule_subdeployment)
 
-def createJmsQueue(jmsqueue_name, jmsmodule_name, jmsmodule_subdeployment):
+def addJmsQueue(jmsqueue_name, jmsmodule_name, jmsmodule_subdeployment):
   print 'creating jms queue: ' + jmsqueue_name
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name)
-  cmo.createQueue(jmsqueue_name)
+  createQueue(jmsqueue_name)
 
   cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/Queues/' + jmsqueue_name)
-  cmo.setJNDIName('jms.' + jmsqueue_name)
-  cmo.setSubDeploymentName(jmsmodule_subdeployment)
+  setJNDIName('jms.' + jmsqueue_name)
+  setSubDeploymentName(jmsmodule_subdeployment)
 
 
 
@@ -127,27 +127,27 @@ set('ListenPort'   ,{{ oracle_wlst_create_domain_info.adminserver.listen_port }}
 # Set the domain password for the WebLogic Server administration user
 cd('/')
 cd('Security/base_domain/User/{{ oracle_wlst_create_domain_info.adminuser.username }}')
-cmo.setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
+setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
 
 # If the domain already exists, overwrite the domain
 setOption('OverwriteDomain', 'true')
 
 {% for ds in oracle_wlst_create_domain_info.custom_datasources %}
-createDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
+addDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
 {% endfor %}
 
 {% for fs in oracle_wlst_create_domain_info.filestores %}
-createFileStore('{{ fs.name }}', '{{ fs.directory }}', '{{ fs.targets }}')
+addFileStore('{{ fs.name }}', '{{ fs.directory }}', '{{ fs.targets }}')
 {% endfor %}
 
 {% for jms_server in oracle_wlst_create_domain_info.messaging.jms_servers %}
-createJmsServer('{{ jms_server.name }}', '{{ jms_server.filestore }}', '{{ jms_server.targets }}')
+addJmsServer('{{ jms_server.name }}', '{{ jms_server.filestore }}', '{{ jms_server.targets }}')
 {% for jms_module in jms_server.jms_modules %}
-createJmsModule('{{ jms_module.name }}', '{{ jms_module.subdeployment }}', '{{ jms_module.targets }}', '{{ jms_server.name }}')
+addJmsModule('{{ jms_module.name }}', '{{ jms_module.subdeployment }}', '{{ jms_module.targets }}', '{{ jms_server.name }}')
 {% for jms_conn_factory in jms_module.connection_factories %}
-createJmsConnectionFactory('{{ jms_conn_factory.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
+addJmsConnectionFactory('{{ jms_conn_factory.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
 {% for jms_queue in jms_module.queues %}
-createJmsQueue('{{ jms_queue.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
+addJmsQueue('{{ jms_queue.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
 {% endfor %}
 {% endfor %}
 {% endfor %}

@@ -1,7 +1,7 @@
 
 
 - set_fact:
-    wlst_path: /tmp/create_domain.py
+    wlst_path: /tmp/create-domain.py
 
 #- template:
 #    src: create-datasource.py.j2
