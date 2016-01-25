@@ -1,5 +1,3 @@
-import create-datasource as ds
-
 ADMIN_SERVER = '{{ oracle_wlst_create_domain_info.adminserver.name }}'
 
 DOMAIN_PATH = '{{ oracle_wlst_create_domain_domains_home }}/{{ oracle_wlst_create_domain_info.name }}'
@@ -70,7 +68,7 @@ cmo.setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
 setOption('OverwriteDomain', 'true')
 
 {% for ds in oracle_wlst_create_domain_info.custom_datasources %}
-ds.createDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
+createDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
 {% endfor %}
 
 # write the domain and close the template
