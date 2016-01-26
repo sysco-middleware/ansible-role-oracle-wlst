@@ -132,6 +132,12 @@ cmo.setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
 # If the domain already exists, overwrite the domain
 setOption('OverwriteDomain', 'true')
 
+print 'writing domain: ' + DOMAIN_PATH
+writeDomain(DOMAIN_PATH)
+closeTemplate()
+
+readDomain(DOMAIN_PATH)
+
 {% for ds in oracle_wlst_create_domain_info.custom_datasources %}
 addDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
 {% endfor %}
@@ -154,8 +160,8 @@ addJmsQueue('{{ jms_queue.name }}', '{{ jms_module.name }}', '{{ jms_module.subd
 {% endfor %}
 
 # write the domain and close the template
-print 'writing domain: ' + DOMAIN_PATH
-writeDomain(DOMAIN_PATH)
+print 'updating domain: ' + DOMAIN_PATH
+updateDomain()
 closeTemplate()
 
 exit()
