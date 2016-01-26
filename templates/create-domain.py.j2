@@ -54,13 +54,12 @@ def addFileStore(filestore_name, filestore_directory, filestore_targets):
   cmo.setDirectory(filestore_directory)
   set('Target',filestore_targets)
 
-def addJmsServer(jmsserver_name, filestore_name, jmsserver_targets):
+def addJmsServer(jmsserver_name, jmsserver_targets):
   cd('/')
   print 'creating jms server: ' + jmsserver_name
   cmo.createJMSServer(jmsserver_name)
 
   cd('/JMSServers/' + jmsserver_name)
-  cmo.setPersistentStore(getMBean('/FileStores/' + filestore_name))
   set('Target',jmsserver_targets)
 
 def addJmsModule(jmsmodule_name, jmsmodule_subdeployment, jmsmodule_targets, jmsserver):
@@ -142,12 +141,8 @@ readDomain(DOMAIN_PATH)
 addDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
 {% endfor %}
 
-{% for fs in oracle_wlst_create_domain_info.filestores %}
-addFileStore('{{ fs.name }}', '{{ fs.directory }}', '{{ fs.targets }}')
-{% endfor %}
-
 {% for jms_server in oracle_wlst_create_domain_info.messaging.jms_servers %}
-addJmsServer('{{ jms_server.name }}', '{{ jms_server.filestore }}', '{{ jms_server.targets }}')
+addJmsServer('{{ jms_server.name }}', '{{ jms_server.targets }}')
 {% for jms_module in jms_server.jms_modules %}
 addJmsModule('{{ jms_module.name }}', '{{ jms_module.subdeployment }}', '{{ jms_module.targets }}', '{{ jms_server.name }}')
 {% for jms_conn_factory in jms_module.connection_factories %}
