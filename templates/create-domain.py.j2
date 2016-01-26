@@ -60,7 +60,7 @@ def addJmsServer(jmsserver_name, filestore_name, jmsserver_targets):
   cmo.createJMSServer(jmsserver_name)
 
   cd('/JMSServers/' + jmsserver_name)
-  cmo.setPersistentStore(getMBean('/FileStores/' + filestore_name))
+  #cmo.setPersistentStore(getMBean('/FileStores/' + filestore_name))
   set('Target',jmsserver_targets)
 
 def addJmsModule(jmsmodule_name, jmsmodule_subdeployment, jmsmodule_targets, jmsserver):
