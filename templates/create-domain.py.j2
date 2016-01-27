@@ -45,65 +45,6 @@ def addDatasource(ds_name, ds_targets, ds_jdbc_driver, ds_jdbc_url, ds_schema_us
   cd('JDBCConnectionPoolParams/NO_NAME_0')
   set('TestTableName','SQL SELECT 1 FROM DUAL')
 
-def addFileStore(filestore_name, filestore_directory, filestore_targets):
-  cd('/')
-  print 'creating jms filestore: ' + filestore_name
-  cmo.createFileStore(filestore_name)
-
-  cd('/FileStores/' + filestore_name)
-  cmo.setDirectory(filestore_directory)
-  set('Target',filestore_targets)
-
-def addJmsServer(jmsserver_name, jmsserver_targets):
-  cd('/')
-  print 'creating jms server: ' + jmsserver_name
-  cmo.createJMSServer(jmsserver_name)
-
-  cd('/JMSServers/' + jmsserver_name)
-  set('Target',jmsserver_targets)
-
-def addJmsModule(jmsmodule_name, jmsmodule_subdeployment, jmsmodule_targets, jmsserver):
-  cd('/')
-  print 'creating jms module: ' + jmsmodule_name
-  cmo.createJMSSystemResource(jmsmodule_name)
-
-  cd('/JMSSystemResources/' + jmsmodule_name)
-  set('Target',jmsmodule_targets)
-  cmo.createSubDeployment(jmsmodule_subdeployment)
-  cd('/JMSSystemResources/' + jmsmodule_name + '/SubDeployments/' + jmsmodule_subdeployment)
-  set('Targets',jarray.array([ObjectName('com.bea:Name=' + jmsserver + ',Type=JMSServer')], ObjectName))
-
-def addJmsConnectionFactory(jmsconnfactory_name, jmsmodule_name, jmsmodule_subdeployment):
-  print 'creating jms cf: ' + jmsconnfactory_name
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name)
-  cmo.createConnectionFactory(jmsconnfactory_name)
-
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name)
-  cmo.setJNDIName('jms.' + jmsconnfactory_name)
-
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/SecurityParams/' + jmsconnfactory_name)
-  cmo.setAttachJMSXUserId(false)
-
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/ClientParams/' + jmsconnfactory_name)
-  cmo.setClientIdPolicy('Restricted')
-  cmo.setSubscriptionSharingPolicy('Exclusive')
-  cmo.setMessagesMaximum(10)
-
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '/TransactionParams/' + jmsconnfactory_name)
-  cmo.setXAConnectionFactoryEnabled(true)
-
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/ConnectionFactories/' + jmsconnfactory_name + '')
-  cmo.setSubDeploymentName(jmsmodule_subdeployment)
-
-def addJmsQueue(jmsqueue_name, jmsmodule_name, jmsmodule_subdeployment):
-  print 'creating jms queue: ' + jmsqueue_name
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name)
-  cmo.createQueue(jmsqueue_name)
-
-  cd('/JMSSystemResources/' + jmsmodule_name + '/JMSResource/' + jmsmodule_name + '/Queues/' + jmsqueue_name)
-  cmo.setJNDIName('jms.' + jmsqueue_name)
-  cmo.setSubDeploymentName(jmsmodule_subdeployment)
-
 # Select the template to use for creating the domain
 {% for template in oracle_wlst_create_domain_info.templates %}
 selectTemplate('{{ template.name }}', '{{ template.version }}')
@@ -128,35 +69,15 @@ cd('/')
 cd('Security/base_domain/User/{{ oracle_wlst_create_domain_info.adminuser.username }}')
 cmo.setPassword('{{ oracle_wlst_create_domain_info.adminuser.password }}')
 
+{% for ds in oracle_wlst_create_domain_info.custom_datasources %}
+addDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
+{% endfor %}
+
 # If the domain already exists, overwrite the domain
 setOption('OverwriteDomain', 'true')
 
 print 'writing domain: ' + DOMAIN_PATH
 writeDomain(DOMAIN_PATH)
-closeTemplate()
-
-readDomain(DOMAIN_PATH)
-
-{% for ds in oracle_wlst_create_domain_info.custom_datasources %}
-addDatasource('{{ ds.name }}', '{{ ds.targets }}', '{{ ds.jdbc_driver}}', '{{ ds.jdbc_url }}', '{{ ds.schema_username }}', '{{ ds.schema_password }}')
-{% endfor %}
-
-{% for jms_server in oracle_wlst_create_domain_info.messaging.jms_servers %}
-addJmsServer('{{ jms_server.name }}', '{{ jms_server.targets }}')
-{% for jms_module in jms_server.jms_modules %}
-addJmsModule('{{ jms_module.name }}', '{{ jms_module.subdeployment }}', '{{ jms_module.targets }}', '{{ jms_server.name }}')
-{% for jms_conn_factory in jms_module.connection_factories %}
-addJmsConnectionFactory('{{ jms_conn_factory.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
-{% for jms_queue in jms_module.queues %}
-addJmsQueue('{{ jms_queue.name }}', '{{ jms_module.name }}', '{{ jms_module.subdeployment }}')
-{% endfor %}
-{% endfor %}
-{% endfor %}
-{% endfor %}
-
-# write the domain and close the template
-print 'updating domain: ' + DOMAIN_PATH
-updateDomain()
 closeTemplate()
 
 exit()
