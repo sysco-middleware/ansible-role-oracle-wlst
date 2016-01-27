@@ -1,0 +1,10 @@
+---
+#
+- set_fact:
+    wlst_path: /tmp/create-jms-resources.py
+
+- template:
+    src: create-jms-resources.py.j2
+    dest: "{{ wlst_path }}"
+
+- include: execute-wlst.yml

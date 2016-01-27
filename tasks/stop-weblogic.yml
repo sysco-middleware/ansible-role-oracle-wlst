@@ -1,0 +1,11 @@
+---
+#
+
+- set_fact:
+    stop_command: "{{ oracle_wlst_create_domain_domains_home }}/{{ oracle_wlst_create_domain_info.name }}/bin/stopWebLogic.sh"
+
+- name: stop admin server
+  shell: "{{ stop_command }} >> /tmp/startWebLogic.log"
+  become: yes
+  become_user: "{{ oracle_wslt_os_user }}"
+  when: oracle_wlst_start_admin
