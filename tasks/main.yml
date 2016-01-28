@@ -1,4 +1,11 @@
 ---
 # tasks file for oracle-wlst
+
+- set_fact:
+    wlst_path: "{{ oracle_wlst_execute_file_path }}"
+  when: oracle_wlst_execute_file
+
 - include: create-domain.yml
   when: oracle_wlst_create_domain
+
+- include: execute-wlst.yml

@@ -6,5 +6,3 @@
 - template:
     src: create-domain.py.j2
     dest: "{{ wlst_path }}"
-
-- include: execute-wlst.yml

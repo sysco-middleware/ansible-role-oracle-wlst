@@ -3,6 +3,9 @@
 oracle_wlst_execute: yes
 oracle_wlst_oracle_home: #
 
+oracle_wlst_execute_file: yes
+oracle_wlst_execute_file_path: #/vagrant/domain.py
+
 oracle_wlst_create_domain: no
 
 oracle_wlst_create_domain_domains_home: #
@@ -13,12 +16,15 @@ oracle_wlst_create_domain_info:
     -
       name: Basic WebLogic Server Domain
       version: 12.2.1
+# WebLogic templates
 #templates included in weblogic
 #Basic WebLogic Server Domain:12.2.1
 #WebLogic Advanced Web Services for JAX-RPC Extension:12.2.1
 #WebLogic Advanced Web Services for JAX-WS Extension:12.2.1
 #WebLogic Coherence Cluster Extension:12.2.1
 #WebLogic JAX-WS SOAP/JMS Extension:12.2.1
+# SOA Suite templates
+
   adminserver:
     name: AdminServer
     listen_address:
